@@ -72,6 +72,22 @@ public abstract class HttpsServer extends HttpServer {
      * Create a {@code HttpsServer} instance which will bind to the specified
      * {@link java.net.InetSocketAddress} (IP address and port number).
      *
+     * @param addr the address to listen on, if {@code null} then
+     *             {@link #bind(InetSocketAddress,int)} must be called to set
+     *             the address
+     * @return an instance of {@code HttpsServer}
+     * @throws BindException if the server cannot bind to the requested address,
+     *          or if the server is already bound
+     * @throws IOException if an I/O error occurs
+     */
+    public static HttpsServer create(InetSocketAddress addr) throws IOException {
+        return create(addr, 0);
+    }
+
+    /**
+     * Create a {@code HttpsServer} instance which will bind to the specified
+     * {@link java.net.InetSocketAddress} (IP address and port number).
+     *
      * A maximum backlog can also be specified. This is the maximum number of
      * queued incoming connections to allow on the listening socket. Queued TCP
      * connections exceeding this limit may be rejected by the TCP implementation.

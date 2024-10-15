@@ -130,6 +130,22 @@ public abstract class HttpServer {
      * Create a {@code HttpServer} instance which will bind to the
      * specified {@link java.net.InetSocketAddress} (IP address and port number).
      *
+     * @param addr the address to listen on, if {@code null} then
+     *             {@link #bind(InetSocketAddress, int)} must be called to set
+     *             the address
+     * @throws IOException if an I/O error occurs
+     * @throws BindException if the server cannot bind to the requested address,
+     * or if the server is already bound
+     * @return an instance of {@code HttpServer}
+     */
+    public static HttpServer create(InetSocketAddress addr) throws IOException {
+        return create(addr, 0);
+    }
+
+    /**
+     * Create a {@code HttpServer} instance which will bind to the
+     * specified {@link java.net.InetSocketAddress} (IP address and port number).
+     *
      * A maximum backlog can also be specified. This is the maximum number of
      * queued incoming connections to allow on the listening socket.
      * Queued TCP connections exceeding this limit may be rejected by the TCP
@@ -205,6 +221,40 @@ public abstract class HttpServer {
     }
 
     /**
+     * Creates an {@code HttpServer} instance with an initial context.
+     *
+     * <p> The server is created with an <i>initial context</i> that maps the
+     * URI {@code path} to the exchange {@code handler}. The initial context is
+     * created as if by an invocation of
+     * {@link HttpServer#createContext(String) createContext(path)}. The
+     * {@code filters}, if any, are added to the initial context, in the order
+     * they are given. The returned server is not started so can be configured
+     * further if required.
+     *
+     * <p> The server instance will bind to the given
+     * {@link java.net.InetSocketAddress}.
+     *
+     * @param addr    the address to listen on, if {@code null} then
+     *                {@link #bind bind} must be called to set the address
+     * @param path    the root URI path of the context, must be absolute
+     * @param handler the HttpHandler for the context
+     * @param filters the Filters for the context, optional
+     * @return the HttpServer
+     * @throws BindException            if the server cannot bind to the address
+     * @throws IOException              if an I/O error occurs
+     * @throws IllegalArgumentException if path is invalid
+     * @throws NullPointerException     if any of: {@code path}, {@code handler},
+     *        {@code filters}, or any element of {@code filters}, are {@code null}
+     * @since 18
+     */
+    public static HttpServer create(InetSocketAddress addr,
+                                    String path,
+                                    HttpHandler handler,
+                                    Filter... filters) throws IOException {
+        return create(addr, 0, path, handler, filters);
+    }
+
+    /**
      * Binds a currently unbound {@code HttpServer} to the given address and
      * port number. A maximum backlog can also be specified. This is the maximum
      * number of queued incoming connections to allow on the listening socket.
@@ -219,6 +269,19 @@ public abstract class HttpServer {
      * @throws NullPointerException if addr is {@code null}
      */
     public abstract void bind(InetSocketAddress addr, int backlog) throws IOException;
+
+    /**
+     * Binds a currently unbound {@code HttpServer} to the given address and
+     * port number.
+     *
+     * @param addr the address to listen on
+     * @throws BindException if the server cannot bind to the requested address
+     * or if the server is already bound
+     * @throws NullPointerException if addr is {@code null}
+     */
+    public final void bind(InetSocketAddress addr) throws IOException {
+        bind(addr, 0);
+    }
 
     /**
      * Starts this server in a new background thread. The background thread
