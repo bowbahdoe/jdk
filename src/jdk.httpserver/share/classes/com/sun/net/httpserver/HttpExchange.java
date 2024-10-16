@@ -31,6 +31,7 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class encapsulates a HTTP request received and a
@@ -351,5 +352,29 @@ public abstract class HttpExchange implements AutoCloseable, Request {
         try (var os = this.getResponseBody()) {
             body.writeTo(os);
         }
+    }
+
+    /**
+     * Sends a response to the client.
+     *
+     * <p>
+     *     If no {@code Content-Type} header has been specified,
+     *     will use the one returned by {@link Body#defaultContentType()}.
+     * </p>
+     *
+     * <p> Calling this will close the {@link InputStream} returned by {@link HttpExchange#getResponseBody()}, which
+     * implicitly closes the {@link InputStream} returned from {@link HttpExchange#getRequestBody()} (if it is not already closed).
+     *
+     * @param exchange       the {@link HttpExchange} to use
+     * @param rCode          the response code to send
+     * @param headers        headers to add before sending the response
+     * @param body           the {@link Body} to send
+     * @throws IOException   if the response headers have already been sent or an I/O error occurs
+     */
+    public final void sendResponse(
+            int rCode, Map<String, List<String>> headers, Body body
+    ) throws IOException {
+        this.getResponseHeaders().putAll(headers);
+        sendResponse(rCode, body);
     }
 }
