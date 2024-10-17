@@ -307,7 +307,6 @@ public abstract class HttpExchange implements AutoCloseable, Request {
      *
      * <p> This method must be called prior to calling {@link HttpExchange#getResponseBody()}.
      *
-     * @param exchange       the {@link HttpExchange} to use
      * @param rCode          the response code to send
      * @param responseLength a {@link ResponseLength} which specifies the amount of bytes that
      *                       will eventually be written to the response body.
@@ -334,7 +333,6 @@ public abstract class HttpExchange implements AutoCloseable, Request {
      * <p> Calling this will close the {@link InputStream} returned by {@link HttpExchange#getResponseBody()}, which
      * implicitly closes the {@link InputStream} returned from {@link HttpExchange#getRequestBody()} (if it is not already closed).
      *
-     * @param exchange       the {@link HttpExchange} to use
      * @param rCode          the response code to send
      * @param body           the {@link Body} to send
      * @throws IOException   if the response headers have already been sent or an I/O error occurs
@@ -365,7 +363,6 @@ public abstract class HttpExchange implements AutoCloseable, Request {
      * <p> Calling this will close the {@link InputStream} returned by {@link HttpExchange#getResponseBody()}, which
      * implicitly closes the {@link InputStream} returned from {@link HttpExchange#getRequestBody()} (if it is not already closed).
      *
-     * @param exchange       the {@link HttpExchange} to use
      * @param rCode          the response code to send
      * @param headers        headers to add before sending the response
      * @param body           the {@link Body} to send
