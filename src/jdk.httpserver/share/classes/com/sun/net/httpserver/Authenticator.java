@@ -57,7 +57,7 @@ public abstract class Authenticator {
      * Indicates an authentication failure. The authentication
      * attempt has completed.
      */
-    public static non-sealed class Failure extends Result {
+    public non-sealed static class Failure extends Result {
 
         private int responseCode;
 
@@ -86,7 +86,7 @@ public abstract class Authenticator {
      * authenticated user {@linkplain HttpPrincipal principal} can be acquired by calling
      * {@link #getPrincipal()}.
      */
-    public static non-sealed class Success extends Result {
+    public non-sealed static class Success extends Result {
         private HttpPrincipal principal;
 
         /**
@@ -116,7 +116,7 @@ public abstract class Authenticator {
      * set any necessary response headers in the given {@link HttpExchange}
      * before returning this {@code Retry} object.
      */
-    public static non-sealed class Retry extends Result {
+    public non-sealed static class Retry extends Result {
 
         private int responseCode;
 
